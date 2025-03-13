@@ -45,7 +45,19 @@ export const getOrderById = async (req, res) => {
         if (!order) {
             return res.status(404).json({ message: 'Orden not found' });
         }
-        res.json(order);
+        const result = {
+            id: order.id,
+            orderNumber: order.orderNumber,
+            date: order.date,
+            totalPrice: order.totalPrice,
+            orderLines: order.orderLines.map(line => ({
+                productId: line.productId,  
+                quantity: line.quantity,
+                name: line.product.name,   
+                price: line.product.price   
+            }))
+        };
+        res.json(result);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
